@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
 
 int open_file_g();
 
@@ -11,11 +13,11 @@ void top_5();
 
 void encryptor_global(struct global_stats gs_);
 
-void encryptor_player(struct global_player ps_);
+void encryptor_player(struct player_stats ps_);
 
 struct global_stats decryptor_global(char *buffer_);
 
-struct global_player decryptor_player(char *buffer_);
+struct player_stats decryptor_player(char *buffer_);
 
 void display_stats_global();
 

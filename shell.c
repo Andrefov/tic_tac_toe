@@ -3,7 +3,7 @@
 #include<ctype.h>
 
 int selected_mode=0, player1_selected_symbol = 0, player2_selected_symbol = 0, one_more = 0, AI_level = 0;     //selected mode: int 1 or 2 or 3
-char* player1_name[10], player2_name[10];
+char* player1_name[8], player2_name[8];
 
 int readline(char* line, size_t len);
 
@@ -78,7 +78,7 @@ int main()
 
 	printf("wybrany symbol to %d\n", player1_selected_symbol);
 	printf("wybrany mode to %d\n", selected_mode);
-	printf("player1 name is %c", player1_name);
+	printf("player1 name is %s", player1_name);
 
 
 	//char* player1name = get_name();
@@ -109,7 +109,7 @@ int readline(char* line, size_t len)
 const char* get_name()
 {
 	// user sets a name
-	char* name[10];
+	char* name[8];
 	readline(name, sizeof(name));
 
 	return name;
@@ -132,13 +132,13 @@ int select_mode()
 		{
 			printf("Player vs Player mode!\n");
 
-			printf("Input player1 name\n>>>");
-			player1_name[9] = get_name();
+			printf("Enter the first player's name\n>>>");
+			player1_name[8] = get_name();
 
 			player1_selected_symbol = select_symbol();
 
-			printf("Input player2 name\n>>>");
-			player2_name[9] = get_name();
+			printf("Enter the second player's name\n>>>");
+			player2_name[8] = get_name();
 			player2_selected_symbol = select_symbol();
 
 			return 1;
@@ -146,8 +146,8 @@ int select_mode()
 		else if (option == 2)
 		{
 			printf("Player vs Computer mode!\n");
-			printf("Input player1 name\n>>>");
-			player1_name[9] = get_name();
+			printf("Enter the first player's name\n>>>");
+			player1_name[8] = get_name();
 			player1_selected_symbol = select_symbol();
 			AI_level = Ai_level();
 			return 2;

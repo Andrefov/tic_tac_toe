@@ -32,20 +32,8 @@ struct player_stats {
 	int moves;
 };
 // ####################################### END OF SECTION ONLY FOR TESTING LOCALLY!!! */
-//https://stackoverflow.com/questions/38684164/case-insensitive-string-comparison-in-c
-// returns 0 if strings are different
-// returns 1 if strings are the same (case insensitive) 
-//
-int iequals(const char* a, const char* b) {
-	int size1 = strlen(a);
-	if (strlen(b) != size1)
-		return 0;
-	for (unsigned int i = 0; i < size1; i++)
-		//if (tolower(a[i]) != tolower(b[i]))
-		if (a[i] != b[i])
-			return 0; 
-	return 1;
-}
+
+
 
 // Game Handler #1
 void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName[8], char gh_PlayerXtwoName[8], struct global_stats gh_globalStats, struct player_stats* gh_playerStats) {
@@ -55,24 +43,34 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 	//	-1 - initial and in progress
 	//	0 - tie
 	//	1 - somebody won
-	switch (gh_gameStatus) {
+	switch (gh_gameStatus)
+	{
 	case -1:
 		printf("Game in progress..\n");
 		break;
+
+
 	case 0: // draw/tie
 		printf("\nGame over!. Nobody won.\n");
 		gh_globalStats.draw++; 
 		gh_globalStats.rounds++;
-		if (gh_gameMode > 1) {
+
+		if (gh_gameMode > 1)
+		{
 			gh_globalStats.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
+
 		if (strcmp(gh_PlayerOoneName, "Nobody") == 0 || strcmp(gh_PlayerXtwoName, "Nobody") == 0) // checking if player name is 'nobody' - should be case insenstive, but it's c...
 		{
 			printf("No, 'Nobody' does NOT mean, the cheating player called 'Nobody' has won.\n"); // just handling a very specific case where player would name himself nobody ;) 
 		}
-		do {
-			if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+
+
+		do
+		{
+			if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName))
+			{
 				gh_playerStats[iter].draw++;
 				gh_playerStats[iter].rounds++;
 				printf("player number %d draw and rounds were incremented.\n", iter);
@@ -80,7 +78,10 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 			}
 			iter++;
 		} while (!found_player && iter <= sizeof(gh_playerStats));
-		do {
+
+
+		do
+		{
 			if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
 				gh_playerStats[iter].draw++;
 				gh_playerStats[iter].rounds++;
@@ -90,6 +91,8 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 			iter++;
 		} while (!found_player && iter <= sizeof(gh_playerStats));
 		break;
+
+
 	case 1: // SOMEONE have won (there is a winner and looser)
 		printf("\nGame over!. We have a winner!\n");
 		//char playerMark - player that have won
@@ -99,14 +102,19 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 		gh_globalStats.wins++;
 		gh_globalStats.losts++;
 		gh_globalStats.rounds++;
-		if (gh_gameMode > 1) {
+
+		if (gh_gameMode > 1)
+		{
 			gh_globalStats.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
-		if (gh_playerMark == 'O') {
+		if (gh_playerMark == 'O')
+		{
 			printf("Congratulations %s, you have won!\n", gh_PlayerOoneName);
-			do {
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+			do
+			{
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) 
+				{
 					gh_playerStats[iter].wins++;
 					gh_playerStats[iter].rounds++;
 					printf("player number %d win and rounds were incremented.\n", iter);
@@ -114,8 +122,12 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 				}
 				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
-			do {
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+
+
+			do
+			{
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName))
+				{
 					gh_playerStats[iter].losts++;
 					gh_playerStats[iter].rounds++;
 					printf("player number %d lost and rounds were incremented.\n", iter);
@@ -124,10 +136,15 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 		}
-		else if (gh_playerMark == 'X') {
+
+		else if (gh_playerMark == 'X') 
+		{
 			printf("Congratulations %s, you have won!\n", gh_PlayerXtwoName);
-			do {
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+
+			do 
+			{
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) 
+				{
 					gh_playerStats[iter].wins++;
 					gh_playerStats[iter].rounds++;
 					printf("player number %d win and rounds were incremented.\n", iter);
@@ -135,8 +152,12 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 				}
 				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
-			do {
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+
+
+			do 
+			{
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName))
+				{
 					gh_playerStats[iter].losts++;
 					gh_playerStats[iter].rounds++;
 					printf("player number %d win and rounds were incremented.\n", iter);
@@ -145,17 +166,17 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 		}
+
 		else {
 			printf("\nGamer error, we have a winner, but don't know who that is!\n");
 		}
 		break;
+
 	default:
 		printf("\nGame error. Status unknown.\n");
 
-}//switch close
+	}//switch close
 }//function close
-
-
 
 
 // ####################################### ONLY FOR TESTING LOCALLY!!! 

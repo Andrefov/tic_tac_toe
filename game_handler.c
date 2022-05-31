@@ -37,18 +37,20 @@ struct player_stats {
 // returns 1 if strings are the same (case insensitive) 
 //
 int iequals(const char* a, const char* b) {
-	unsigned int size1 = strlen(a);
+	int size1 = strlen(a);
 	if (strlen(b) != size1)
 		return 0;
 	for (unsigned int i = 0; i < size1; i++)
-		if (tolower(a[i]) != tolower(b[i]))
+		//if (tolower(a[i]) != tolower(b[i]))
+		if (a[i] != b[i])
 			return 0; 
 	return 1;
 }
 
 // Game Handler #1
-void printGameState(int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName[8], char gh_PlayerXtwoName[8], struct global_stats* gh_globalStats, struct player_stats* gh_playerStats) {
+void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName[8], char gh_PlayerXtwoName[8], struct global_stats gh_globalStats, struct player_stats* gh_playerStats) {
 	int found_player = 0, iter = 0;
+	//Game Mode from Shell:  1.Player vs Player 2.Player vs Computer 3.Computer vs Computer
 	// int gameStatus (infro from baord)
 	//	-1 - initial and in progress
 	//	0 - tie
@@ -57,92 +59,103 @@ void printGameState(int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName
 	case -1:
 		printf("Game in progress..\n");
 		break;
-	case 0:
-		printf("Game over!. Nobody won.\n");
+	case 0: // draw/tie
+		printf("\nGame over!. Nobody won.\n");
+		gh_globalStats.draw++; 
+		gh_globalStats.rounds++;
+		if (gh_gameMode > 1) {
+			gh_globalStats.comp_vs++;
+			printf("global stats of comp vs were incremented\n");
+		}
 		if (strcmp(gh_PlayerOoneName, "Nobody") == 0 || strcmp(gh_PlayerXtwoName, "Nobody") == 0) // checking if player name is 'nobody' - should be case insenstive, but it's c...
 		{
 			printf("No, 'Nobody' does NOT mean, the cheating player called 'Nobody' has won.\n"); // just handling a very specific case where player would name himself nobody ;) 
 		}
 		do {
-			if (iequals(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+			if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) {
 				gh_playerStats[iter].draw++;
 				gh_playerStats[iter].rounds++;
+				printf("player number %d draw and rounds were incremented.\n", iter);
+				found_player = 1;
 			}
+			iter++;
 		} while (!found_player && iter <= sizeof(gh_playerStats));
 		do {
-			if (iequals(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+			if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
 				gh_playerStats[iter].draw++;
 				gh_playerStats[iter].rounds++;
+				printf("player number %d draw and rounds were incremented.\n", iter);
+				found_player = 1;
 			}
+			iter++;
 		} while (!found_player && iter <= sizeof(gh_playerStats));
 		break;
-	case 1:
-		printf("Game over!. We have a winner!\n");
+	case 1: // SOMEONE have won (there is a winner and looser)
+		printf("\nGame over!. We have a winner!\n");
 		//char playerMark - player that have won
 		//	' ' - initial
 		//	'O'
 		//	'X'
+		gh_globalStats.wins++;
+		gh_globalStats.losts++;
+		gh_globalStats.rounds++;
+		if (gh_gameMode > 1) {
+			gh_globalStats.comp_vs++;
+			printf("global stats of comp vs were incremented\n");
+		}
 		if (gh_playerMark == 'O') {
 			printf("Congratulations %s, you have won!\n", gh_PlayerOoneName);
 			do {
-				if (iequals(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) {
 					gh_playerStats[iter].wins++;
 					gh_playerStats[iter].rounds++;
+					printf("player number %d win and rounds were incremented.\n", iter);
+					found_player = 1;
 				}
+				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 			do {
-				if (iequals(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
 					gh_playerStats[iter].losts++;
 					gh_playerStats[iter].rounds++;
+					printf("player number %d lost and rounds were incremented.\n", iter);
+					found_player = 1;
 				}
+				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 		}
 		else if (gh_playerMark == 'X') {
 			printf("Congratulations %s, you have won!\n", gh_PlayerXtwoName);
 			do {
-				if (iequals(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
 					gh_playerStats[iter].wins++;
 					gh_playerStats[iter].rounds++;
+					printf("player number %d win and rounds were incremented.\n", iter);
+					found_player = 1;
 				}
+				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 			do {
-				if (iequals(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) {
 					gh_playerStats[iter].losts++;
 					gh_playerStats[iter].rounds++;
+					printf("player number %d win and rounds were incremented.\n", iter);
+					found_player = 1;
 				}
+				iter++;
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 		}
 		else {
-			printf("Gamer error, we have a winner, but don't know who that is!\n");
+			printf("\nGamer error, we have a winner, but don't know who that is!\n");
 		}
 		break;
 	default:
-		printf("Game error. Status unknown.\n");
+		printf("\nGame error. Status unknown.\n");
 
 }//switch close
 }//function close
 
 
-// Game Handler #2
-void updateWinnerStats(char gh_winnerName[8], struct global_stats* gh_globalStats, struct player_stats* gh_playerStats) {
-
-	// how to update the statistics for a player
-	// 1. no function for adding new record
-	// funkcja_andrzeja_dodajaca_wygrana(nazwaGraczaKtoryWygral);
-	// 2. no comments on how to do it differently (a global/extern variable/structure)
-	// 3. this could be done by me returning some data/structure - this would need to be agreed on and handled in main..
-	//
-}
-
-// Game Handler #3
-int updateGameTimes() {
-
-}
-
-// Game Handler #4
-int updateGameTimes() {
-
-}
 
 
 // ####################################### ONLY FOR TESTING LOCALLY!!! 
@@ -151,20 +164,29 @@ int updateGameTimes() {
 int main()
 {
 	struct global_stats gs; //used the same names as in statistics.c
-	struct player_stats ps[5];
-	*ps[0].name = "Nobody";
-	*ps[1].name = "Body0";
-	*ps[2].name = "Body1";
-	*ps[3].name = "Body2";
-	*ps[4].name = "Body3";
-	*ps[5].name = "Body4";
+	struct player_stats ps[5] = {
+		{.name = "Nobody"},
+		{.name = "Body0"},
+		{.name = "Srody"},
+		{.name = "Czwartki"},
+		{.name = "Dupa"}
+	};
 	gs.time = 100;
 	//while (1) {
+		printf("###\nTEST: tie, compvs, nobody and body0\n");
+		printGameState(2, 0, ' ', "Nobody", "Body0", gs, ps);
 
-		printGameState(0, ' ', "Nobody", "Drugi", gs, ps);
-		printGameState(-1, ' ', "Nobody", "Drugi", gs, ps);
-		printGameState(1, ' ', "Nobody", "Drugi", gs, ps);
-		printGameState(23, ' ', "Nobody", "Drugi", gs, ps);
+		printf("###\nTEST: in progress compvs, nobody and body0\n");
+		printGameState(2, -1, ' ', "Nobody", "Body0", gs, ps); //in progress/initial
+
+		printf("###\nTEST: winner/looser compvs, nobody and body0\n");
+		printGameState(2, 1, ' ', "Nobody", "Body0", gs, ps); //winner/looser but we don't know who
+
+		printf("###\nTEST: winner/looser, player 2 compvs, nobody and body0\n");
+		printGameState(2, 1, 'X', "Nobody", "Body0", gs, ps); //winner/looser and it is player 2
+
+		printf("###\nTEST: error compvs, nobody and body0\n");
+		printGameState(2, 5, ' ', "Nobody", "Body0", gs, ps); //error!
 	//}
 	printf("\n\n\n\n\nMAIN:OK\nThis is just a test");
 	return 0;

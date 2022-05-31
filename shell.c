@@ -2,7 +2,96 @@
 #include<string.h>
 #include<ctype.h>
 
-int readline(char* line, size_t len) {
+int selected_mode=0, player1_selected_symbol = 0, player2_selected_symbol = 0, one_more = 0, AI_level = 0;     //selected mode: int 1 or 2 or 3
+char* player1_name[10], player2_name[10];
+
+int readline(char* line, size_t len);
+
+const char* get_name();
+
+int select_mode();
+
+int Ai_level();
+
+int select_symbol();
+
+void end_game_results(int result);
+
+int one_more_game();
+
+void help_menu();
+
+int take_coordinate();
+
+
+
+int display_menu()
+{	
+	help_menu();
+	//loop for navigate in the menu
+	int choice;
+	char* line[1];
+
+	while (1)
+	{
+		readline(line, sizeof(line));
+		choice = atoi(line);
+
+		if ((choice < 1) || (choice > 4))
+		{
+			printf("Invalid input. Try again>>>");
+			continue;
+		}
+		else if (choice == 1)
+		{
+			selected_mode = select_mode();
+			break;
+			
+		}
+		else if (choice == 2)
+		{
+			//display_stats_global()
+		}
+		else if (choice == 3)
+		{
+			//display_stats_player(player_)
+		}
+		else if (choice == 4)
+		{
+			//exit 
+			break;
+		}
+	}
+
+
+	
+	return 0;
+}
+
+
+
+
+int main()
+{
+
+	display_menu();
+
+	printf("wybrany symbol to %d\n", player1_selected_symbol);
+	printf("wybrany mode to %d\n", selected_mode);
+	printf("player1 name is %c", player1_name);
+
+
+	//char* player1name = get_name();
+	//printf("%s", player1name);
+	//settings:
+	
+	return 0;
+
+}
+
+int readline(char* line, size_t len)
+{
+	//functions takes input from user
 	line[len - 1] = 0xaa;
 
 	if (fgets(line, len, stdin) == NULL) {
@@ -17,48 +106,78 @@ int readline(char* line, size_t len) {
 	line[strlen(line) - 1] = '\0';
 }
 
+const char* get_name()
+{
+	// user sets a name
+	char* name[10];
+	readline(name, sizeof(name));
+
+	return name;
+}
+
 int select_mode()
 {//user chooses the game mode
-	int option;
-	printf("Select mode:\n1.Player vs Player\n2.Player vs Computer\n3.Computer vs Computer \n>>>");
-	scanf_s("%d", &option),2;
+	int option = 0;
+	char* line[1];
 
-	switch (option)
+
+	printf("Select mode:\n1.Player vs Player\n2.Player vs Computer\n3.Computer vs Computer \n>>>");
+
+	while (1)
 	{
-		case 1:
+		readline(line, sizeof(line));
+		option = atoi(line);
+
+		if (option == 1)
+		{
 			printf("Player vs Player mode!\n");
-			select_symbol();
-			break;    // do testow
-			//game
+
+			printf("Input player1 name\n>>>");
+			player1_name[9] = get_name();
+
+			player1_selected_symbol = select_symbol();
+
+			printf("Input player2 name\n>>>");
+			player2_name[9] = get_name();
+			player2_selected_symbol = select_symbol();
+
 			return 1;
-			
-		case 2:
+		}
+		else if (option == 2)
+		{
 			printf("Player vs Computer mode!\n");
-			Ai_level();
-			select_symbol();
-			//game
+			printf("Input player1 name\n>>>");
+			player1_name[9] = get_name();
+			player1_selected_symbol = select_symbol();
+			AI_level = Ai_level();
 			return 2;
-		case 3:
+		}
+		else if (option == 3)
+		{
 			printf("Computer vs Computer mode\n");
-			break;   //do testow
-			//game
 			return 3;
-		default:
-			printf("Unknown option\n");
-			return -1;
+		}
+		else
+		{
+			printf("Unknown option\nTry again>>>");
+			continue;
+		}
 	}
+
 }
 
 int Ai_level()
 {
 	//user can choose the AI level
-	int level;
+	int level = 0;
+	char* line[1];
 	printf("Select AI level:\n1.Easy\n2.Hard \n>>>");
-
 
 	while (1)
 	{
-		scanf_s("%d", &level);
+		readline(line, sizeof(line));
+		level = atoi(line);
+
 		if (level == 1)
 		{
 			printf("Easy!\n");
@@ -81,12 +200,16 @@ int Ai_level()
 int select_symbol()
 {
 	//user can choose the symbol
-	int symbol;
+	int symbol = 0;
+	char* line[1];
+
 	printf("Select your symbol:\n1.X\n2.O \n>>>");
-	
+
 	while (1)
 	{
-		scanf_s("%d", &symbol);
+		readline(line, sizeof(line));
+		symbol = atoi(line);
+
 		if (symbol == 1)
 		{
 			printf("'X' symbol choosen.\n");
@@ -106,8 +229,6 @@ int select_symbol()
 
 }
 
-
-
 void end_game_results(int result)
 {	//func gives game results
 	if (result == 1)
@@ -120,7 +241,7 @@ void end_game_results(int result)
 	}
 	else if (result == 0)
 	{
-		printf(" Draw!\n");
+		printf("It's a tie!\n");
 	}
 }
 
@@ -130,15 +251,12 @@ int one_more_game()
 	char choice[6];
 
 	printf("Do you want play again? Type 'yes', 'no' or 'quit' to return to main menu. \n>>>");
-	// cos nie dziala, przenosi od razu do elsa
+
 	while (1)
 	{
-		
-		if (readline(choice, sizeof(choice)) == 0)
-		{
-			continue;
-		}
-		else if (strncmp(choice, "yes", 4) == 0)
+		readline(choice, sizeof(choice));
+
+		if (strncmp(choice, "yes", 4) == 0)
 		{
 			printf("lets play again\n");
 			return 1;
@@ -159,8 +277,6 @@ int one_more_game()
 
 		}
 	}
-	
-	
 }
 
 void help_menu()
@@ -179,92 +295,23 @@ int take_coordinate()
 {
 	// func takes coordinate from user
 	int cor;
-	printf("Enter coordinate (1-9 field)\n>>>");
+	char* line[1];
+	printf("Enter coordinate (1-9 fields)\n>>>");
 
 	while (1)
 	{
-		scanf_s("%d",&cor);
-		if ((cor > 9) || (cor < 1))
+		readline(line, sizeof(line));
+		cor = atoi(line);
+
+		if ((cor <= 9) && (cor >= 1))
 		{
-			printf("Invalid position! Try again>>>");
+			break;
+		}
+		else
+		{
+			printf("Invalid input. Try again>>>");
 			continue;
 		}
-		break;
 	}
-
 	return cor;
-}
-
-int display_menu()
-{	
-	help_menu();
-	//loop for navigate in the menu
-	int choice;
-	
-	while (1)
-	{
-		scanf_s("%d", &choice);
-
-		if ((choice < 1) || (choice > 4))
-		{
-			printf("Invalid input. Try again");
-			continue;
-		}
-		
-		break;
-	}
-	// po wpisaniu litery mam blad na stosie.
-
-	if (choice == 1)
-	{
-		select_mode();
-	}
-	else if (choice == 2)
-	{
-		//display_stats_global()
-	}
-	else if (choice == 3)
-	{
-		//display_stats_player(player_)
-	}
-	else
-	{
-		//exit to main menu
-	}
-	return 0;
-}
-
-
-void get_name()
-{
-	// user sets a name
-	char* name[10];
-	printf("What is your name? max 8 characters\n>>>");
-	readline(name, sizeof(name));
-	printf("Hello %s, welcome in TicTacToe Game\n\n", name);
-}
-
-int main()
-{
-	//testowy main
-
-	get_name();
-	
-	
-	
-	display_menu();
-
-	int result = 1;
-	end_game_results(result);
-
-	one_more_game();
-
-	int coordinate;
-
-	coordinate = take_coordinate();
-	
-	printf("choosen coordinate is %d", coordinate);
-
-	return 0;
-
 }

@@ -63,6 +63,18 @@ void printGameState(int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName
 		{
 			printf("No, 'Nobody' does NOT mean, the cheating player called 'Nobody' has won.\n"); // just handling a very specific case where player would name himself nobody ;) 
 		}
+		do {
+			if (iequals(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+				gh_playerStats[iter].draw++;
+				gh_playerStats[iter].rounds++;
+			}
+		} while (!found_player && iter <= sizeof(gh_playerStats));
+		do {
+			if (iequals(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+				gh_playerStats[iter].draw++;
+				gh_playerStats[iter].rounds++;
+			}
+		} while (!found_player && iter <= sizeof(gh_playerStats));
 		break;
 	case 1:
 		printf("Game over!. We have a winner!\n");
@@ -75,6 +87,13 @@ void printGameState(int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName
 			do {
 				if (iequals(gh_playerStats[iter].name, gh_PlayerOoneName)) {
 					gh_playerStats[iter].wins++;
+					gh_playerStats[iter].rounds++;
+				}
+			} while (!found_player && iter <= sizeof(gh_playerStats));
+			do {
+				if (iequals(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
+					gh_playerStats[iter].losts++;
+					gh_playerStats[iter].rounds++;
 				}
 			} while (!found_player && iter <= sizeof(gh_playerStats));
 		}
@@ -83,8 +102,15 @@ void printGameState(int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName
 			do {
 				if (iequals(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
 					gh_playerStats[iter].wins++;
+					gh_playerStats[iter].rounds++;
 				}
-			} while (!found_player && iter <= sizeof(gh_playerStats));;
+			} while (!found_player && iter <= sizeof(gh_playerStats));
+			do {
+				if (iequals(gh_playerStats[iter].name, gh_PlayerOoneName)) {
+					gh_playerStats[iter].losts++;
+					gh_playerStats[iter].rounds++;
+				}
+			} while (!found_player && iter <= sizeof(gh_playerStats));
 		}
 		else {
 			printf("Gamer error, we have a winner, but don't know who that is!\n");

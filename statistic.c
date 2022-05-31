@@ -1,22 +1,24 @@
 #include "statistic.h"
 
 struct global_stats {
-	unsigned int time;
-	unsigned int wins;
-	unsigned int losts;
-	unsigned int rounds;
-	unsigned int comp_vs;
+	int time;
+	int wins;
+	int losts;
+	int draw;
+	int rounds;
+	int comp_vs;
 };
 
 struct global_stats gs;
 
 struct player_stats {
 	char name[8];
-	unsigned int time;
-	unsigned int wins;
-	unsigned int losts;
-	unsigned int rounds;
-	unsigned int moves;
+	int time;
+	int wins;
+	int losts;
+	int draw;
+	int rounds;
+	int moves;
 };
 
 struct player_stats ps;
@@ -122,6 +124,9 @@ void encryptor_global(struct global_stats gs) {
 	temp = gs.losts;
 	strcat(stats_buffer, temp);
 	strcat(stats_buffer, "\n");
+	temp = gs.draw;
+	strcat(stats_buffer, temp);
+	strcat(stats_buffer, "\n");
 	temp = gs.rounds;
 	strcat(stats_buffer, temp);
 	strcat(stats_buffer, "\n");
@@ -154,6 +159,9 @@ void encryptor_player(struct player_stats ps_){
 	strcat(stats_buffer, temp);
 	strcat(stats_buffer, '\n');
 	temp = ps.losts;
+	strcat(stats_buffer, temp);
+	strcat(stats_buffer, '\n');
+	temp = ps.draw;
 	strcat(stats_buffer, temp);
 	strcat(stats_buffer, '\n');
 	temp = ps.rounds;
@@ -195,7 +203,7 @@ struct global_stats decryptor_global(char *stats_buffer_) {
 	int jump = 0;
 	char *sample;
 
-	for (int j = 0; j < 5; j++) {
+	for (int j = 0; j < 6; j++) {
 		sample = strchr(stats_buffer, '\n');
 		jump = (strlen(sample)) + 1;
 		*stats_buffer += jump;
@@ -207,8 +215,10 @@ struct global_stats decryptor_global(char *stats_buffer_) {
 		case 2:
 			gs.losts = atoi(sample);
 		case 3:
-			gs.rounds = atoi(sample);
+			gs.draw = atoi(sample);
 		case 4:
+			gs.rounds = atoi(sample);
+		case 5:
 			gs.comp_vs = atoi(sample);
 		}
 	}
@@ -231,7 +241,7 @@ struct player_stats decryptor_player(char* stats_buffer_) {
 	int jump = 0;
 	char* sample;
 
-	for (int j = 0; j < 6; j++) {
+	for (int j = 0; j < 7; j++) {
 		sample = strchr(stats_buffer, '\n');
 		jump = (strlen(sample)) + 1;
 		*stats_buffer += jump;
@@ -245,8 +255,10 @@ struct player_stats decryptor_player(char* stats_buffer_) {
 		case 3:
 			ps.losts = atoi(sample);
 		case 4:
-			ps.rounds = atoi(sample);
+			ps.draw = atoi(sample);
 		case 5:
+			ps.rounds = atoi(sample);
+		case 6:
 			ps.moves = atoi(sample);
 		}
 	}
@@ -279,6 +291,7 @@ void display_stats_global() {
 		printf("Total time played: %d h, %d m, %d s.\n", hours, minutes, seconds);
 		printf("Total wins: %d.\n", gs.wins);
 		printf("Total Losts: %d.\n", gs.losts);
+		printf("Total draws: %d.\n", gs.draw);
 		printf("Rounds: %d.\n", gs.rounds);
 		printf("Computer vs Computer: %d.\n\n", gs.comp_vs);
 	}
@@ -308,6 +321,7 @@ void display_stats_player(int player_) {
 	printf("Total time played: %d h, %d m, %d s.\n", hours, minutes, seconds);
 	printf("Total wins: %d.\n", ps.wins);
 	printf("Total Losts: %d.\n", ps.losts);
+	printf("Total draws: %d.\n", ps.draw);
 	printf("Rounds: %d.\n", ps.rounds);
 	printf("Computer vs Computer: %d.\n\n", ps.moves);
 

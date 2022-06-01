@@ -12,6 +12,8 @@
 int gh_game_mode;
 int gh_game_status;
 int gh_player_mark; //????????????----------- int or char -----------------????
+int gh_game_time;
+int gh_game_moves;
 
 
 // ####################################### ONLY FOR TESTING LOCALLY!!! 
@@ -26,7 +28,6 @@ struct global_stats {
 	int comp_vs;
 
 };
-struct global_stats gh_gs;
 
 struct player_stats {
 	char name[8];
@@ -38,19 +39,26 @@ struct player_stats {
 	int moves;
 };
 
+struct global_stats gh_gs;
 struct player_stats gh_ps1;
-
 struct player_stats gh_ps2;
+
+
 // ####################################### END OF SECTION ONLY FOR TESTING LOCALLY!!! */
+void increase_time() {
+	gh_ps1.time + gh_game_time; // gh_game_time - to ma dostarczyć info BOARD - do doliczania czasu
+	gh_ps2.time + gh_game_time;
+}
 
 void print_game_state() 
 {
-	int found_player = 0, iter = 0;
 	//Game Mode from Shell:  1.Player vs Player 2.Player vs Computer 3.Computer vs Computer
 	// int gameStatus (infro from baord)
 	//	-1 - initial and in progress
 	//	0 - tie
 	//	1 - somebody won
+	increase_time();
+
 	switch (gh_game_status)
 	{
 	case -1:
@@ -62,27 +70,25 @@ void print_game_state()
 		printf("\nGame over!. Nobody won.\n");
 		gh_gs.draw++; 
 		gh_gs.rounds++;
+		
 
 		if (gh_game_mode > 1 ) // ustalić na stałe imię compa
 		{
 			gh_gs.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
+		 // dopisanie remisu i rundy do pierwszego gracza 
+			gh_ps1.draw++;
+			gh_ps1.rounds++;
+			gh_ps1.moves + gh_game_moves; // doliczenie ruchów
+			printf("player number %s draw and rounds were incremented.\n", gh_ps1.name);
 		
-		if (strcmp(player1_name, gh_ps1.name) == 0) // imie aktualnego gracza 
-			{
-				gh_ps1.draw++;
-				gh_ps1.rounds++;
-				printf("player number %s draw and rounds were incremented.\n", gh_ps1.name);
-			}
-
-
-		if (strcmp(player2_name, gh_ps2.name) == 0) // imie aktualnego 2 gracza
-			{
-				gh_ps2.draw++;
-				gh_ps2.rounds++;
-				printf("player number %s draw and rounds were incremented.\n", gh_ps2.name);
-			}
+		// dopisanie remisu i rundy do drugiego gracza 
+			gh_ps2.draw++;
+			gh_ps2.rounds++;
+			gh_ps2.moves + gh_game_moves; // doliczenie ruchów
+			printf("player number %s draw and rounds were incremented.\n", gh_ps2.name);
+			
 		break;
 
 
@@ -101,27 +107,27 @@ void print_game_state()
 			gh_gs.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
+
 		if (gh_player_mark == 1) // zmienna z board który gracz wygrał
 		{
 			printf("Congratulations %s, you have won!\n", gh_ps1.name);
 			gh_ps1.wins++;
 			gh_ps1.rounds++;
+			gh_ps1.moves + gh_game_moves; // doliczanie ruchów do wygranego
 			
 			gh_ps2.losts++;
 			gh_ps2.rounds++;
-		}
-
-		else if (gh_player_mark == 2)
-		{
+			gh_ps2.moves + gh_game_moves - 1;
+		} else if (gh_player_mark == 2) {
 			printf("Congratulations %s, you have won!\n", gh_ps2.name);
 			gh_ps2.wins++;
 			gh_ps2.rounds++;
+			gh_ps2.moves + gh_game_moves; // doliczanie ruchów dla wygranego
 
 			gh_ps1.losts++;
 			gh_ps1.rounds++;
-		}
-
-		else {
+			gh_ps1.moves + gh_game_moves - 1; 
+		} else {
 			printf("\nGamer error, we have a winner, but don't know who that is!\n");
 		}
 		break;
@@ -130,6 +136,13 @@ void print_game_state()
 		printf("\nGame error. Status unknown.\n");
 
 	}
+}
+
+
+void print_player_statistic(struct player_stats ps) {
+	printf("Player statistic for %s\n", ps.name);
+	printf("Time: %d", ps.time);
+
 }
 
 

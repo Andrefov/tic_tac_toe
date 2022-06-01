@@ -23,10 +23,32 @@ void help_menu();
 
 int take_coordinate();
 
+int display_menu();
 
+void choose_my_name(char* imie)
+{
+	fgets(imie, 30, stdin);
+}
+
+int main()
+{
+
+	display_menu();
+
+	printf("wybrany symbol to %d\n", player1_selected_symbol);
+	printf("wybrany mode to %d\n", selected_mode);
+	printf("player1 name is %s", player1_name);
+
+
+	//char* player1name = get_name();
+	//printf("%s", player1name);
+	//settings:
+	
+	return 0;
+}
 
 int display_menu()
-{	
+{
 	help_menu();
 	//loop for navigate in the menu
 	int choice;
@@ -46,7 +68,7 @@ int display_menu()
 		{
 			selected_mode = select_mode();
 			break;
-			
+
 		}
 		else if (choice == 2)
 		{
@@ -62,31 +84,7 @@ int display_menu()
 			break;
 		}
 	}
-
-
-	
 	return 0;
-}
-
-
-
-
-int main()
-{
-
-	display_menu();
-
-	printf("wybrany symbol to %d\n", player1_selected_symbol);
-	printf("wybrany mode to %d\n", selected_mode);
-	printf("player1 name is %s", player1_name);
-
-
-	//char* player1name = get_name();
-	//printf("%s", player1name);
-	//settings:
-	
-	return 0;
-
 }
 
 int readline(char* line, size_t len)
@@ -120,7 +118,6 @@ int select_mode()
 	int option = 0;
 	char* line[1];
 
-
 	printf("Select mode:\n1.Player vs Player\n2.Player vs Computer\n3.Computer vs Computer \n>>>");
 
 	while (1)
@@ -133,12 +130,12 @@ int select_mode()
 			printf("Player vs Player mode!\n");
 
 			printf("Enter the first player's name\n>>>");
-			player1_name[8] = get_name();
+			choose_my_name(player1_name);
 
 			player1_selected_symbol = select_symbol();
 
 			printf("Enter the second player's name\n>>>");
-			player2_name[8] = get_name();
+			choose_my_name(player2_name);
 			player2_selected_symbol = select_symbol();
 
 			return 1;
@@ -147,7 +144,7 @@ int select_mode()
 		{
 			printf("Player vs Computer mode!\n");
 			printf("Enter the first player's name\n>>>");
-			player1_name[8] = get_name();
+			choose_my_name(player1_name);
 			player1_selected_symbol = select_symbol();
 			AI_level = Ai_level();
 			return 2;

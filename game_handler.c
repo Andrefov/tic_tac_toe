@@ -2,25 +2,31 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "shell.c"
 
 // commented only for local tests
 //#include "statistic.h" // this wil be required to be able te define the structures in the same way
 // structures in statistic.c could also be defined with as 'extern'
 
 #pragma warning(disable : 4996)
+int gh_game_mode;
+int gh_game_status;
+int gh_player_mark; //????????????----------- int or char -----------------????
 
 
 // ####################################### ONLY FOR TESTING LOCALLY!!! 
 //TODO: delete or comment me me before pushing merging etc
  // /* <-- just comment/uncomment this line
 struct global_stats {
-	int time;
+	int time; // ??????????-------> int ????
 	int wins;
 	int losts;
 	int draw;
 	int rounds;
 	int comp_vs;
+
 };
+struct global_stats gh_gs;
 
 struct player_stats {
 	char name[8];
@@ -31,19 +37,21 @@ struct player_stats {
 	int rounds;
 	int moves;
 };
+
+struct player_stats gh_ps1;
+
+struct player_stats gh_ps2;
 // ####################################### END OF SECTION ONLY FOR TESTING LOCALLY!!! */
 
-
-
-// Game Handler #1
-void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char gh_PlayerOoneName[8], char gh_PlayerXtwoName[8], struct global_stats gh_globalStats, struct player_stats* gh_playerStats) {
+void print_game_state() 
+{
 	int found_player = 0, iter = 0;
 	//Game Mode from Shell:  1.Player vs Player 2.Player vs Computer 3.Computer vs Computer
 	// int gameStatus (infro from baord)
 	//	-1 - initial and in progress
 	//	0 - tie
 	//	1 - somebody won
-	switch (gh_gameStatus)
+	switch (gh_game_status)
 	{
 	case -1:
 		printf("Game in progress..\n");
@@ -52,44 +60,29 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 
 	case 0: // draw/tie
 		printf("\nGame over!. Nobody won.\n");
-		gh_globalStats.draw++; 
-		gh_globalStats.rounds++;
+		gh_gs.draw++; 
+		gh_gs.rounds++;
 
-		if (gh_gameMode > 1)
+		if (gh_game_mode > 1 ) // ustalić na stałe imię compa
 		{
-			gh_globalStats.comp_vs++;
+			gh_gs.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
-
-		if (strcmp(gh_PlayerOoneName, "Nobody") == 0 || strcmp(gh_PlayerXtwoName, "Nobody") == 0) // checking if player name is 'nobody' - should be case insenstive, but it's c...
-		{
-			printf("No, 'Nobody' does NOT mean, the cheating player called 'Nobody' has won.\n"); // just handling a very specific case where player would name himself nobody ;) 
-		}
-
-
-		do
-		{
-			if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName))
+		
+		if (strcmp(player1_name, gh_ps1.name) == 0) // imie aktualnego gracza 
 			{
-				gh_playerStats[iter].draw++;
-				gh_playerStats[iter].rounds++;
-				printf("player number %d draw and rounds were incremented.\n", iter);
-				found_player = 1;
+				gh_ps1.draw++;
+				gh_ps1.rounds++;
+				printf("player number %s draw and rounds were incremented.\n", gh_ps1.name);
 			}
-			iter++;
-		} while (!found_player && iter <= sizeof(gh_playerStats));
 
 
-		do
-		{
-			if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) {
-				gh_playerStats[iter].draw++;
-				gh_playerStats[iter].rounds++;
-				printf("player number %d draw and rounds were incremented.\n", iter);
-				found_player = 1;
+		if (strcmp(player2_name, gh_ps2.name) == 0) // imie aktualnego 2 gracza
+			{
+				gh_ps2.draw++;
+				gh_ps2.rounds++;
+				printf("player number %s draw and rounds were incremented.\n", gh_ps2.name);
 			}
-			iter++;
-		} while (!found_player && iter <= sizeof(gh_playerStats));
 		break;
 
 
@@ -99,72 +92,33 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 		//	' ' - initial
 		//	'O'
 		//	'X'
-		gh_globalStats.wins++;
-		gh_globalStats.losts++;
-		gh_globalStats.rounds++;
+		gh_gs.wins++;
+		gh_gs.losts++;
+		gh_gs.rounds++;
 
-		if (gh_gameMode > 1)
+		if (gh_game_mode > 1)
 		{
-			gh_globalStats.comp_vs++;
+			gh_gs.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
-		if (gh_playerMark == 'O')
+		if (gh_player_mark == 1) // zmienna z board który gracz wygrał
 		{
-			printf("Congratulations %s, you have won!\n", gh_PlayerOoneName);
-			do
-			{
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName)) 
-				{
-					gh_playerStats[iter].wins++;
-					gh_playerStats[iter].rounds++;
-					printf("player number %d win and rounds were incremented.\n", iter);
-					found_player = 1;
-				}
-				iter++;
-			} while (!found_player && iter <= sizeof(gh_playerStats));
-
-
-			do
-			{
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName))
-				{
-					gh_playerStats[iter].losts++;
-					gh_playerStats[iter].rounds++;
-					printf("player number %d lost and rounds were incremented.\n", iter);
-					found_player = 1;
-				}
-				iter++;
-			} while (!found_player && iter <= sizeof(gh_playerStats));
+			printf("Congratulations %s, you have won!\n", gh_ps1.name);
+			gh_ps1.wins++;
+			gh_ps1.rounds++;
+			
+			gh_ps2.losts++;
+			gh_ps2.rounds++;
 		}
 
-		else if (gh_playerMark == 'X') 
+		else if (gh_player_mark == 2)
 		{
-			printf("Congratulations %s, you have won!\n", gh_PlayerXtwoName);
+			printf("Congratulations %s, you have won!\n", gh_ps2.name);
+			gh_ps2.wins++;
+			gh_ps2.rounds++;
 
-			do 
-			{
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerXtwoName)) 
-				{
-					gh_playerStats[iter].wins++;
-					gh_playerStats[iter].rounds++;
-					printf("player number %d win and rounds were incremented.\n", iter);
-					found_player = 1;
-				}
-				iter++;
-			} while (!found_player && iter <= sizeof(gh_playerStats));
-
-
-			do 
-			{
-				if (strcmp(gh_playerStats[iter].name, gh_PlayerOoneName))
-				{
-					gh_playerStats[iter].losts++;
-					gh_playerStats[iter].rounds++;
-					printf("player number %d win and rounds were incremented.\n", iter);
-					found_player = 1;
-				}
-				iter++;
-			} while (!found_player && iter <= sizeof(gh_playerStats));
+			gh_ps1.losts++;
+			gh_ps1.rounds++;
 		}
 
 		else {
@@ -175,8 +129,8 @@ void printGameState(int gh_gameMode, int gh_gameStatus, int gh_playerMark, char 
 	default:
 		printf("\nGame error. Status unknown.\n");
 
-	}//switch close
-}//function close
+	}
+}
 
 
 // ####################################### ONLY FOR TESTING LOCALLY!!! 

@@ -29,34 +29,34 @@ int main() {
 	char player_mark = ' '; //X' or 'Y' for player
 
 
+	do {
+		start_board(); // display board with index
 
-	start_board(); // display board with index
+
+		while (game_status < 0)
+		{
+			print_board();
+
+			// PLAYER ONE
+			player_one_move();
+			game_status = is_win();
+			player_mark = 'O';
+			if (game_status >= 0)
+				break;
+			print_board();
+			// PLAYER TWO
+			player_two_move();
+			game_status = is_win();
+			player_mark = 'X';
+			if (game_status >= 0)
+				break;
 
 
-	while (game_status < 0)
-	{
+		}
+
 		print_board();
-
-		// PLAYER ONE
-		player_one_move();
-		game_status = is_win();
-		player_mark = 'O';
-		if (game_status >= 0)
-			break;
-		print_board();
-		// PLAYER TWO
-		player_two_move();
-		game_status = is_win();
-		player_mark = 'X';
-		if (game_status >= 0)
-			break;
-
-
-	}
-
-	print_board();
-	who_win(player_mark, game_status);
-
+		who_win(player_mark, game_status);
+	} while (one more game())   // 0- no more game, 1 - play another round
 
 	return 0;
 }

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include<ctype.h>
+#include<time.h>
+
 #pragma warning(disable : 4996)
 
 void startBoard();
@@ -9,7 +11,7 @@ int isFree(int coordinate);
 int isWin();
 void playerOneMove(int positionOnBoard);
 void playerTwoMove(int positionOnBoard);
-void whoWin(char playerMark, int gameStatus);
+int whoWin(char playerMark, int gameStatus);
 
 
 
@@ -18,14 +20,20 @@ void whoWin(char playerMark, int gameStatus);
 char board[9];
 const char PLAYER_ONE = 'O';
 const char PLAYER_TWO = 'X';
-
+double howLong;
+clock_t begin, end;
 
 int main() {
 
 	int gameStatus = -1;
 	char playerMark = ' '; //X' or 'Y' for player
 
+
+
 	startBoard(); // display board with index
+
+	if (are you ready ? )    /// argument from shell if sombedoy start a game 
+		begin = clock();
 
 	while (gameStatus < 0)
 	{
@@ -186,17 +194,30 @@ void playerTwoMove(int positionOnBoard) {
 	system("cls");
 }
 
-void whoWin(char playerMark, int gameStatus) {
+int whoWin(char playerMark, int gameStatus) {
 	/* Function display who is the winner or is a tie
 	INPUT:
-	OUTPUT:
+	OUTPUT: integer descrpie who win  player one =1 or player two = 2 or tie =0
 	*/
 	if (gameStatus == 0)
+	{
+		end = clock();
+		howLong = end - begin;
 		printf("IT'S A TIE!\n");
-	else if (playerMark == PLAYER_ONE)
+		return 0;
+	}
+	else if (playerMark == PLAYER_ONE) {
+		end = clock();
+		howLong = end - begin;
 		printf("PLAYER ONE WIN!\n");
+		return 1;
+	}
 	else if (playerMark == PLAYER_TWO)
+	{
+		end = clock();
+		howLong = end - begin;
 		printf("PLAYER TWO WIN!\n");
-
+		return 2;
+	}
 
 }

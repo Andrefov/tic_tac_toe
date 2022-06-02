@@ -9,8 +9,8 @@ void start_board();
 void print_board();
 int is_free(int coordinate);
 int is_win();
-void player_one_move(int positionOnBoard);
-void player_two_move(int positionOnBoard);
+void player_one_move(int position_on_board);
+void player_two_move(int position_on_board);
 int who_win(char player_mark, int game_status);
 
 
@@ -28,12 +28,11 @@ int main() {
 
 	int game_status = -1;
 	char player_mark = ' '; //X' or 'Y' for player
-	move_player1 = 0;
-	move_player2 = 0;
-
 
 
 	do {
+		move_player1 = 0; // reset counter for another round
+		move_player2 = 0; // reset counter for another round
 		start_board(); // display board with index
 
 
@@ -60,6 +59,8 @@ int main() {
 
 		print_board();
 		who_win(player_mark, game_status);
+
+
 	} while (one more game())   // 0- no more game, 1 - play another round
 
 	return 0;
@@ -152,12 +153,12 @@ int is_win() {
 
 }
 
-void player_one_move(int positionOnBoard) {
+void player_one_move(int position_on_board) {
 	/* Function display move PLAYER_TWO ont the board
 	INPUT: integer - posiiton on the board
 	OUTPUT:
 	*/
-	int player_input = positionOnBoard;
+	int player_input = position_on_board;
 
 	do {
 		printf("PLAYER 1, please give a position: \n");
@@ -165,7 +166,7 @@ void player_one_move(int positionOnBoard) {
 		if (is_free(player_input))
 		{
 			board[player_input] = PLAYER_ONE;
-			move_player2++; // succesful move, increment variable
+			move_player1++; // succesful move, increment variable
 			break;
 		}
 		else
@@ -174,13 +175,13 @@ void player_one_move(int positionOnBoard) {
 	system("cls");
 }
 
-void player_two_move(int positionOnBoard) {
+void player_two_move(int position_on_board) {
 	/* Function display move PLAYER_TWO ont the board
 	INPUT: integer - posiiton on the board
 	OUTPUT:
 	*/
 
-	int player_input = positionOnBoard;
+	int player_input = position_on_board;
 
 	do {
 		printf("PLAYER 2, please give a position: \n");

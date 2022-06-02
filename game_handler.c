@@ -165,8 +165,6 @@ poziom trudności - dummy_move
 
 void round() {
 
-	selected_mode();
-
 	if (selected_mode == 1) {// player vs player
 
 		do {
@@ -193,29 +191,114 @@ void round() {
 				print_board();
 			}
 			print_game_state();
+			move_player1 = 0;
+			move_player2 = 0;
 
 		} while (one_more_game() == 1);
 	}
 
-		else if (selected_mode == 2){ // player vs comp
+	else if (selected_mode == 2) { // player vs comp
 
-			start_board();
-			selected_mode();
+		start_board();
 
-			switch (ai_level)
-			{
-			case 1: // poziom trudności dummy
+		switch (ai_level)
+		{
+		case 1: // poziom trudności dummy
+			print_board();
 
-				dummy_move
+			do {
+				while (is_win() == -1) {
 
-			case 2: // poziom trudności pro
+					if (player1_selected_symbol == 1)
+					{
+						print_board();
 
-				pro_move
+						which_player = 1;
+						player_one_move(take_coordinate(which_player));
+						gh_ps1.move = move_player1;
+						print_board();
 
-			default:
-				break;
+						if (is_win() >= 0) {
+							break;
+						}
+						print_board();
+						player_one_move(dummy_move());
+						sleep(100);
+
+					}
+					else if (player_selected_symbol == 2)
+					{
+						print_board();
+						player_one_move(dummy_move());
+						sleep(100);
+
+						if (is_win() >= 0) {
+							break;
+						}
+
+						which_player = 1;
+						player_two_move(take_coordinate(which_player));
+						gh_ps1.move = move_player1;
+						print_board();
+					}
+				}
+				print_game_state();
+				move_player1 = 0;
+				move_player2 = 0;
+
+			} while (one_more_game() == 1);
+			break;
+		}
+
+	case 2: // poziom trudności pro
+		print_board();
+
+		do {
+			while (is_win() == -1) {
+
+				if (player1_selected_symbol == 1)
+				{
+					print_board();
+
+					which_player = 1;
+					player_one_move(take_coordinate(which_player));
+					gh_ps1.move = move_player1;
+					print_board();
+
+					if (is_win() >= 0) {
+						break;
+					}
+					print_board();
+					player_one_move(pro_move());
+					sleep(100);
+
+				}
+				else if (player_selected_symbol == 2)
+				{
+					print_board();
+					player_one_move(pro_move());
+					sleep(100);
+
+					if (is_win() >= 0) {
+						break;
+					}
+
+					which_player = 1;
+					player_two_move(take_coordinate(which_player));
+					gh_ps1.move = move_player1;
+					print_board();
+				}
 			}
+			print_game_state();
+			move_player1 = 0;
+			move_player2 = 0;
+
+		} while (one_more_game() == 1);
+		break;
+
+
 	}
+
 
 	if (selected_mode == 3) // comp vs comp
 
@@ -236,10 +319,11 @@ void round() {
 				default:
 					break;
 				}
-		
+		case 3:
 
 		how_long();
-
+			default:
+				break;
 	
 }
 

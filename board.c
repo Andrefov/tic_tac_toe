@@ -5,13 +5,13 @@
 
 #pragma warning(disable : 4996)
 
-void startBoard();
-void printBoard();
-int isFree(int coordinate);
-int isWin();
-void playerOneMove(int positionOnBoard);
-void playerTwoMove(int positionOnBoard);
-int whoWin(char playerMark, int gameStatus);
+void start_board();
+void print_board();
+int is_free(int coordinate);
+int is_win();
+void player_one_move(int positionOnBoard);
+void player_two_move(int positionOnBoard);
+int who_win(char player_mark, int game_status);
 
 
 
@@ -20,50 +20,48 @@ int whoWin(char playerMark, int gameStatus);
 char board[9];
 const char PLAYER_ONE = 'O';
 const char PLAYER_TWO = 'X';
-double howLong;
+double how_long;
 clock_t begin, end;
 
 int main() {
 
-	int gameStatus = -1;
-	char playerMark = ' '; //X' or 'Y' for player
+	int game_status = -1;
+	char player_mark = ' '; //X' or 'Y' for player
 
 
 
-	startBoard(); // display board with index
+	start_board(); // display board with index
 
-	if (are you ready ? )    /// argument from shell if sombedoy start a game 
-		begin = clock();
 
-	while (gameStatus < 0)
+	while (game_status < 0)
 	{
-		printBoard();
+		print_board();
 
 		// PLAYER ONE
-		playerOneMove();
-		gameStatus = isWin();
-		playerMark = 'O';
-		if (gameStatus >= 0)
+		player_one_move();
+		game_status = is_win();
+		player_mark = 'O';
+		if (game_status >= 0)
 			break;
-		printBoard();
+		print_board();
 		// PLAYER TWO
-		playerTwoMove();
-		gameStatus = isWin();
-		playerMark = 'X';
-		if (gameStatus >= 0)
+		player_two_move();
+		game_status = is_win();
+		player_mark = 'X';
+		if (game_status >= 0)
 			break;
 
 
 	}
 
-	printBoard();
-	whoWin(playerMark, gameStatus);
+	print_board();
+	who_win(player_mark, game_status);
 
 
 	return 0;
 }
 
-void startBoard() {
+void start_board() {
 	/* Function display start board with index
 	INPUT:
 	OUTPUT:
@@ -74,7 +72,7 @@ void startBoard() {
 	}
 }
 
-void printBoard() {
+void print_board() {
 	/* Function display plane
 	INPUT:
 	OUTPUT:
@@ -94,7 +92,7 @@ void printBoard() {
 	printf("\t   |   |   \n");
 }
 
-int isFree(int coordinate) {
+int is_free(int coordinate) {
 	/* Function check if field on board is free
 	INPUT: position on the board
 	OUTPUT: integer
@@ -108,7 +106,7 @@ int isFree(int coordinate) {
 
 }
 
-int isWin() {
+int is_win() {
 	/* Function check is player win or not
 	INPUT:
 	OUTPUT: integer value:
@@ -116,106 +114,106 @@ int isWin() {
 			 0 - tie,
 			-1 - in progress
 	*/
-	int gameResult = 0;
+	int game_result = 0;
 
 	// horizontal win
 	for (int i = 0; i < 9; i += 3) {
 		if (board[0 + i] == board[1 + i] && board[1 + i] == board[2 + i])
-			return gameResult = 1;
+			return game_result = 1;
 	}
 
 	//vertical win
 	for (int i = 0; i < 3; i++) {
 		if (board[0 + i] == board[3 + i] && board[3 + i] == board[6 + i])
-			return gameResult = 1;
+			return game_result = 1;
 	}
 
 	//cross win
 
 	if (board[0] == board[4] && board[4] == board[8])
-		return gameResult = 1;
+		return game_result = 1;
 	else if (board[2] == board[4] && board[4] == board[6])
-		return gameResult = 1;
+		return game_result = 1;
 
 	// tie - no more free spaces
 
 	else if (board[0] != '1' && board[1] != '2' && board[2] != '3' &&
 		board[3] != '4' && board[4] != '5' && board[5] != '6' &&
 		board[6] != '7' && board[7] != '8' && board[8] != '9')
-		return gameResult = 0;
+		return game_result = 0;
 
 	// game is in progress
 	else
-		return gameResult = -1;
+		return game_result = -1;
 
 }
 
-void playerOneMove(int positionOnBoard) {
+void player_one_move(int positionOnBoard) {
 	/* Function display move PLAYER_TWO ont the board
 	INPUT: integer - posiiton on the board
 	OUTPUT:
 	*/
-	int playerInput = positionOnBoard;
+	int player_input = positionOnBoard;
 
 	do {
 		printf("PLAYER 1, please give a position: \n");
-		playerInput--;
-		if (isFree(playerInput))
+		player_input--;
+		if (is_free(player_input))
 		{
-			board[playerInput] = PLAYER_ONE;
+			board[player_input] = PLAYER_ONE;
 			break;
 		}
 		else
 			printf("Position is unevailable ");
-	} while (!isFree(playerInput));
+	} while (!is_free(player_input));
 	system("cls");
 }
 
-void playerTwoMove(int positionOnBoard) {
+void player_two_move(int positionOnBoard) {
 	/* Function display move PLAYER_TWO ont the board
 	INPUT: integer - posiiton on the board
 	OUTPUT:
 	*/
 
-	int playerInput = positionOnBoard;
+	int player_input = positionOnBoard;
 
 	do {
 		printf("PLAYER 2, please give a position: \n");
-		playerInput--;
+		player_input--;
 
-		if (isFree(playerInput))
+		if (is_free(player_input))
 		{
-			board[playerInput] = PLAYER_TWO;
+			board[player_input] = PLAYER_TWO;
 			break;
 		}
 		else
 			printf("Position is unevailable ");
-	} while (!isFree(playerInput));
+	} while (!is_free(player_input));
 	system("cls");
 }
 
-int whoWin(char playerMark, int gameStatus) {
+int who_win(char player_mark, int game_status) {
 	/* Function display who is the winner or is a tie
 	INPUT:
 	OUTPUT: integer descrpie who win  player one =1 or player two = 2 or tie =0
 	*/
-	if (gameStatus == 0)
+	if (game_status == 0)
 	{
 		end = clock();
-		howLong = end - begin;
+		how_long = end - begin;
 		printf("IT'S A TIE!\n");
 		return 0;
 	}
-	else if (playerMark == PLAYER_ONE) {
+	else if (player_mark == PLAYER_ONE) {
 		end = clock();
-		howLong = end - begin;
+		how_long = end - begin;
 		printf("PLAYER ONE WIN!\n");
 		return 1;
 	}
-	else if (playerMark == PLAYER_TWO)
+	else if (player_mark == PLAYER_TWO)
 	{
 		end = clock();
-		howLong = end - begin;
+		how_long = end - begin;
 		printf("PLAYER TWO WIN!\n");
 		return 2;
 	}

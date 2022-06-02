@@ -139,8 +139,6 @@ void print_player_statistic(struct player_stats ps) {
 
 
 /*
-funkcja round
-sprawdzić game mode i dostosowac -
 human vs comp - zależy jaki znak wybrał znak X czy O i sprawdzić jaki poziom gry
 
 pro move dla compa przekazać do Andrzeja
@@ -167,45 +165,58 @@ poziom trudności - dummy_move
 
 void round() {
 
-	do	{
+	selected_mode();
 
-		start_board();
-		selected_mode();
+	if (selected_mode == 1) {// player vs player
 
-		if (selected_mode == 1) // player vs player
+		do {
+			start_board();
 
 			while (is_win() == -1) {
+				
+				print_board();
 
 				which_player = 1;
 				player_one_move(take_coordinate(which_player));
 				gh_ps1.move = move_player1;
+				print_board();
+				
+				if (is_win() >= 0) {
+					break;
+				}
+
+				print_board();
 
 				which_player = 2;
 				player_two_move((take_coordinate(which_player));
 				gh_ps2.move = move_player2;
+				print_board();
 			}
-		print_game_state();
+			print_game_state();
 
-	} while (one_more_game() == 1);
-	
+		} while (one_more_game() == 1);
+	}
 
-	
+		else if (selected_mode == 2){ // player vs comp
 
-	if (selected_mode == 2) // player vs comp
+			start_board();
+			selected_mode();
 
-				switch (ai_level)
-				{
-				case 1: // poziom trudności dummy
+			switch (ai_level)
+			{
+			case 1: // poziom trudności dummy
 
-					dummy_move
+				dummy_move
 
-				case 2: // poziom trudności pro
+			case 2: // poziom trudności pro
 
-					pro_move
+				pro_move
 
-				default:
-					break;
-				}
+			default:
+				break;
+			}
+	}
+
 	if (selected_mode == 3) // comp vs comp
 
 				switch (ai_level)

@@ -176,15 +176,13 @@ void round() {
 
 			while (is_win() == -1) {
 
-				if
-					which_player = 1
-					player_one_move(take_coordinate(which_player));
+				which_player = 1;
+				player_one_move(take_coordinate(which_player));
 				gh_ps1.move = move_player1;
 
-				else
-					which_player = 2
-					player_two_move((take_coordinate(which_player))
-						gh_ps2.move = move_player2;
+				which_player = 2;
+				player_two_move((take_coordinate(which_player));
+				gh_ps2.move = move_player2;
 			}
 		print_game_state();
 

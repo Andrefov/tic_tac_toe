@@ -158,7 +158,7 @@ int select_mode()
 
 			player1_selected_symbol = select_symbol();
 
-			AI_level = Ai_level();
+			ai_level = Ai_level();
 
 			return 2;
 		}

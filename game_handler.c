@@ -137,32 +137,6 @@ void print_player_statistic(struct player_stats ps) {
 }
 
 
-
-/*
-human vs comp - zależy jaki znak wybrał znak X czy O i sprawdzić jaki poziom gry
-
-pro move dla compa przekazać do Andrzeja
-
-player vs player
-
-czy ktoś wygrał czy nie wygrał
-
-kto gra i kto robi w danym momencie ruch i wtedy doliczać do moves
-
-shell  jeżeli jest humen vs  coś tam
-
-if game made jest humen human - doliczam ruchy jeżeli 
-player comp takie to
-current player to jest 1  czy 2 w danym ruchu
-
-x zawsze zaczyna czy jest kompem czy humanem
-
-wywyływanie ruchu komputera 'calculate_move' - player number w środku
-wysyłać int - poziom trudności z shell
-poziom trudności - dummy_move
-
-*/
-
 void round() {
 
 	if (selected_mode == 1) {// player vs player
@@ -171,14 +145,14 @@ void round() {
 			start_board();
 
 			while (is_win() == -1) {
-				
+
 				print_board();
 
 				which_player = 1;
 				player_one_move(take_coordinate(which_player));
 				gh_ps1.move = move_player1;
 				print_board();
-				
+
 				if (is_win() >= 0) {
 					break;
 				}
@@ -250,6 +224,8 @@ void round() {
 			break;
 		}
 
+	}
+
 	case 2: // poziom trudności pro
 		print_board();
 
@@ -273,8 +249,7 @@ void round() {
 					sleep(100);
 
 				}
-				else if (player_selected_symbol == 2)
-				{
+				else if (player_selected_symbol == 2) {
 					print_board();
 					player_one_move(pro_move());
 					sleep(100);
@@ -296,71 +271,64 @@ void round() {
 		} while (one_more_game() == 1);
 		break;
 
+	default:
+		break;
+}
 
-	}
+	else if (selected_mode == 3) {		// comp vs comp
 
+	print_board();
 
-	if (selected_mode == 3) // comp vs comp
+	switch (ai_level) {
+	case 1: //poziom trudności dummy
+		print_board();
 
-				switch (ai_level)
-				{
-				case 1: // poziom trudności dummy
-
-					dummy_move
-					player_move
-						_sleep
-
-				case 2: // poziom trudności pro
-
-					pro_move
-					player_move
-						_sleep
-
-				default:
+		while (is_win() == -1) {
+			if (player_selected_symbol == 1)
+			{
+				print_board();
+				player_one_move(dummy_move());
+				sleep(100);
+				
+				if (is_win() >= 0) {
 					break;
 				}
-		case 3:
+				print_board();
+				player_two_move(dummy_move());
+				sleep(100);
+			}
+			print_game_state();
+			move_player1 = 0;
+			move_player2 = 0;
+		} while (one_more_game() == 1);
+		break;
 
-		how_long();
-			default:
-				break;
+	case 2: // poziom trudności pro
+		print_board();
+
+		while (is_win() == -1) {
+			if (player_selected_symbol == 1)
+			{
+				print_board();
+				player_one_move(pro_move());
+				sleep(100);
+
+				if (is_win() >= 0) {
+					break;
+				}
+				print_board();
+				player_two_move(pro_move());
+				sleep(100);
+			}
+			print_game_state();
+			move_player1 = 0;
+			move_player2 = 0;
+		} while (one_more_game() == 1);
+		break;
 	
+	default:
+		break;
+	}
+
 }
-
-
-
-// ####################################### ONLY FOR TESTING LOCALLY!!! 
-//TODO: delete or comment me me before pushing merging etc
-/* <-- just comment/uncomment this line
-int main()
-{
-	struct global_stats gs; //used the same names as in statistics.c
-	struct player_stats ps[5] = {
-		{.name = "Nobody"},
-		{.name = "Body0"},
-		{.name = "Srody"},
-		{.name = "Czwartki"},
-		{.name = "Dupa"}
-	};
-	gs.time = 100;
-	//while (1) {
-		printf("###\nTEST: tie, compvs, nobody and body0\n");
-		printGameState(2, 0, ' ', "Nobody", "Body0", gs, ps);
-
-		printf("###\nTEST: in progress compvs, nobody and body0\n");
-		printGameState(2, -1, ' ', "Nobody", "Body0", gs, ps); //in progress/initial
-
-		printf("###\nTEST: winner/looser compvs, nobody and body0\n");
-		printGameState(2, 1, ' ', "Nobody", "Body0", gs, ps); //winner/looser but we don't know who
-
-		printf("###\nTEST: winner/looser, player 2 compvs, nobody and body0\n");
-		printGameState(2, 1, 'X', "Nobody", "Body0", gs, ps); //winner/looser and it is player 2
-
-		printf("###\nTEST: error compvs, nobody and body0\n");
-		printGameState(2, 5, ' ', "Nobody", "Body0", gs, ps); //error!
-	//}
-	printf("\n\n\n\n\nMAIN:OK\nThis is just a test");
-	return 0;
-}
-// ####################################### END OF SECTION ONLY FOR TESTING LOCALLY!!! */
 

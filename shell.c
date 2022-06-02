@@ -2,7 +2,7 @@
 #include<string.h>
 #include<ctype.h>
 
-int selected_mode=0, player1_selected_symbol = 0, player2_selected_symbol = 0, one_more = 0, ai_level = 0, exit_game = 0;     //selected mode: int 1 or 2 or 3
+int which_player = 1; selected_mode=0, player1_selected_symbol = 0, player2_selected_symbol = 0, one_more = 0, ai_level = 0, exit_game = 0;     //selected mode: int 1 or 2 or 3
 char player1_name[10], player2_name[10];
 
 int readline(char* line, size_t len);
@@ -26,13 +26,16 @@ int display_menu();
 
 int main()
 {
-
-	display_menu();
+	
+	int cor;
+	cor = take_coordinate(which_player);
+	printf("Koordynata to %d", cor);
+	/*display_menu();
 
 	printf("wybrany symbol to %d\n", player1_selected_symbol);
 	printf("wybrany mode to %d\n", selected_mode);
 	printf("player1 name is %s, player2 name is %s\n", player1_name, player2_name);
-	printf("player1 symbol is %d, player2 is %d", player1_selected_symbol, player2_selected_symbol);
+	printf("player1 symbol is %d, player2 is %d", player1_selected_symbol, player2_selected_symbol);*/
 
 	return 0;
 }
@@ -142,7 +145,7 @@ int select_mode()
 			{
 				player2_selected_symbol = 2; //player2 dostaje O
 			}
-			else//                      w innm wypadku
+			else//                        w innm wypadku
 			{
 				player2_selected_symbol = 1;// player2 dostaje X
 			}
@@ -306,12 +309,20 @@ void help_menu()
 
 }
 
-int take_coordinate()
+int take_coordinate(int which_player)
 {
 	// Func takes coordinate from user and returns it.
 	int cor;
 	char* line[1];
-	printf("Enter coordinate (1-9 fields)\n>>>");
+	if (which_player == 1)
+	{
+		printf("%c enter coordinate (1-9 fields)\n>>>" ,player1_name);
+	}
+	else
+	{
+		printf("%c enter coordinate (1-9 fields)\n>>>", player2_name);
+	}
+	
 
 	while (1)
 	{

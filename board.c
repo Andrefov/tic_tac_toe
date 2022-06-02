@@ -18,8 +18,8 @@ int who_win(char player_mark, int game_status);
 
 // global variable with board on the board
 char board[9];
-const char PLAYER_ONE = 'O';
-const char PLAYER_TWO = 'X';
+const char PLAYER_ONE = 'X';
+const char PLAYER_TWO = 'O';
 double how_long;
 int move_player1, move_player2;  // counter for player moves: player1 and player 2
 clock_t begin, end;
@@ -43,14 +43,14 @@ int main() {
 			// PLAYER ONE
 			player_one_move();
 			game_status = is_win();
-			player_mark = 'O';
+			player_mark = 'X';
 			if (game_status >= 0)
 				break;
 			print_board();
 			// PLAYER TWO
 			player_two_move();
 			game_status = is_win();
-			player_mark = 'X';
+			player_mark = 'O';
 			if (game_status >= 0)
 				break;
 
@@ -161,7 +161,7 @@ void player_one_move(int position_on_board) {
 	int player_input = position_on_board;
 
 	do {
-		printf("PLAYER 1, please give a position: \n");
+		printf("%s, please give a position: \n",player1_name);
 		player_input--;
 		if (is_free(player_input))
 		{
@@ -184,7 +184,7 @@ void player_two_move(int position_on_board) {
 	int player_input = position_on_board;
 
 	do {
-		printf("PLAYER 2, please give a position: \n");
+		printf("%s, please give a position: \n", player2_name);
 		player_input--;
 
 		if (is_free(player_input))

@@ -50,6 +50,46 @@ void increase_time() {
 	gh_ps2.time + gh_game_time;
 }
 
+/*
+funkcja round
+sprawdzić game mode i dostosowac -
+human vs comp - zależy jaki znak wybrał znak X czy O i sprawdzić jaki poziom gry
+
+pro move dla compa przekazać do Andrzeja
+
+player vs player
+
+czy ktoś wygrał czy nie wygrał
+
+kto gra i kto robi w danym momencie ruch i wtedy doliczać do moves
+
+shell  jeżeli jest humen vs  coś tam
+
+if game made jest humen human - doliczam ruchy jeżeli 
+player comp takie to
+current player to jest 1  czy 2 w danym ruchu
+
+x zawsze zaczyna czy jest kompem czy humanem
+
+wywyływanie ruchu komputera 'calculate_move' - player number w środku
+wysyłać int - poziom trudności z shell
+poziom trudności - dummy_move
+
+select_mode
+1- player vs player
+2- player vs comp
+3- comp vs comp
+
+*/
+
+void lauch_game() {
+	if (selected_mode == 1)
+
+
+
+}
+
+
 void print_game_state() 
 {
 	//Game Mode from Shell:  1.Player vs Player 2.Player vs Computer 3.Computer vs Computer
@@ -77,17 +117,17 @@ void print_game_state()
 			gh_gs.comp_vs++;
 			printf("global stats of comp vs were incremented\n");
 		}
-		 // dopisanie remisu i rundy do pierwszego gracza 
-			gh_ps1.draw++;
-			gh_ps1.rounds++;
-			gh_ps1.moves + gh_game_moves; // doliczenie ruchów
-			printf("player number %s draw and rounds were incremented.\n", gh_ps1.name);
+		// dopisanie remisu i rundy do pierwszego gracza 
+		gh_ps1.draw++;
+		gh_ps1.rounds++;
+		gh_ps1.moves + gh_game_moves; // doliczenie ruchów
+		printf("player number %s draw and rounds were incremented.\n", gh_ps1.name);
 		
 		// dopisanie remisu i rundy do drugiego gracza 
-			gh_ps2.draw++;
-			gh_ps2.rounds++;
-			gh_ps2.moves + gh_game_moves; // doliczenie ruchów
-			printf("player number %s draw and rounds were incremented.\n", gh_ps2.name);
+		gh_ps2.draw++;
+		gh_ps2.rounds++;
+		gh_ps2.moves + gh_game_moves; // doliczenie ruchów
+		printf("player number %s draw and rounds were incremented.\n", gh_ps2.name);
 			
 		break;
 
@@ -146,9 +186,11 @@ void print_player_statistic(struct player_stats ps) {
 }
 
 
+
+
 // ####################################### ONLY FOR TESTING LOCALLY!!! 
 //TODO: delete or comment me me before pushing merging etc
-// /* <-- just comment/uncomment this line
+/* <-- just comment/uncomment this line
 int main()
 {
 	struct global_stats gs; //used the same names as in statistics.c

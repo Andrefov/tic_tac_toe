@@ -21,12 +21,16 @@ char board[9];
 const char PLAYER_ONE = 'O';
 const char PLAYER_TWO = 'X';
 double how_long;
+int move_player1, move_player2;  // counter for player moves: player1 and player 2
 clock_t begin, end;
 
 int main() {
 
 	int game_status = -1;
 	char player_mark = ' '; //X' or 'Y' for player
+	move_player1 = 0;
+	move_player2 = 0;
+
 
 
 	do {
@@ -161,6 +165,7 @@ void player_one_move(int positionOnBoard) {
 		if (is_free(player_input))
 		{
 			board[player_input] = PLAYER_ONE;
+			move_player2++; // succesful move, increment variable
 			break;
 		}
 		else
@@ -184,6 +189,7 @@ void player_two_move(int positionOnBoard) {
 		if (is_free(player_input))
 		{
 			board[player_input] = PLAYER_TWO;
+			move_player2++; // succesful move, increment variable
 			break;
 		}
 		else

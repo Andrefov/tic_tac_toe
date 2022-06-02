@@ -2,7 +2,7 @@
 #include<string.h>
 #include<ctype.h>
 
-int selected_mode=0, player1_selected_symbol = 0, player2_selected_symbol = 0, one_more = 0, AI_level = 0, exit_game = 0;     //selected mode: int 1 or 2 or 3
+int selected_mode=0, player1_selected_symbol = 0, player2_selected_symbol = 0, one_more = 0, ai_level = 0, exit_game = 0;     //selected mode: int 1 or 2 or 3
 char player1_name[10], player2_name[10];
 
 int readline(char* line, size_t len);

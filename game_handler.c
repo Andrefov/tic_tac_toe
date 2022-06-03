@@ -248,8 +248,8 @@ void round() {
 	}
 	else if (selected_mode == 3) {		// comp vs comp
 		print_board();
-		switch (ai_level) {
-		case 1: //poziom trudnoœci dummy
+		if (ai_level == 1) {
+
 			print_board();
 			while (is_win() == -1) {
 				if (player1_selected_symbol == 1)
@@ -269,9 +269,9 @@ void round() {
 				move_player1 = 0;
 				move_player2 = 0;
 			} while (one_more_game() == 1);
-			break;
-		case 2: // poziom trudnoœci pro
-			print_board();
+
+			if (ai_level == 2) // poziom trudnoœci pro
+				print_board();
 			while (is_win() == -1) {
 				if (player1_selected_symbol == 1)
 				{
@@ -289,9 +289,6 @@ void round() {
 				move_player1 = 0;
 				move_player2 = 0;
 			} while (one_more_game() == 1);
-			break;
-		default:
-			break;
-		}
+		}				
 	}
 }

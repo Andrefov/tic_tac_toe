@@ -161,6 +161,9 @@ int select_mode()
 			system("cls");
 			printf("\n\n\ TiC TaC ToE GaME\n\n");
 			printf("Computer vs Computer mode\n");
+			
+
+			ai_level = ai_level_select();
 			return 3;
 		}
 

@@ -22,6 +22,10 @@ struct player_stats {
 	int moves;
 };
 
+struct global_stats gs;
+
+struct player_stats ps;
+
 int open_file_g();
 
 int open_file_p(int player_);

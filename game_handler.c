@@ -16,6 +16,7 @@ extern int one_more;
 extern int move_player1, move_player2;
 extern char player1_name[9], player2_name[9];
 
+
 struct global_stats gh_gs;
 struct player_stats gh_ps1;
 struct player_stats gh_ps2;
@@ -23,6 +24,10 @@ struct player_stats gh_ps2;
 void increase_time() {
 	gh_ps1.time + gh_game_time; // gh_game_time - to ma dostarczyæ info BOARD - do doliczania czasu
 	gh_ps2.time + gh_game_time;
+
+	
+
+
 }
 void print_game_state()
 {
@@ -36,10 +41,16 @@ void print_game_state()
 		printf("\nGame over!. Nobody won.\n");
 		gh_gs.draw++;
 		gh_gs.rounds++;
+
+		gs.draw += gh_gs.draw;
+		gs.rounds += gh_gs.rounds;
 		// dopisanie remisu i rundy do pierwszego gracza 
-		gh_ps1.draw++;
-		gh_ps1.rounds++;
-		gh_ps1.moves = move_player1; // doliczenie ruchów
+		ps.draw += gh_ps1.draw++;
+		ps.rounds += gh_ps1.rounds++;
+		ps.moves += gh_ps1.moves = move_player1;
+		
+		
+		// doliczenie ruchów
 		// dopisanie remisu i rundy do drugiego gracza 
 		gh_ps2.draw++;
 		gh_ps2.rounds++;
@@ -47,9 +58,9 @@ void print_game_state()
 		break;
 	case 1: // SOMEONE have won (there is a winner and looser)
 		printf("\nGame over!. We have a winner!\n");
-		gh_gs.wins++;
-		gh_gs.losts++;
-		gh_gs.rounds++;
+		gs.wins +=gh_gs.wins++;
+		gs.losts +=gh_gs.losts++;
+		gs.rounds += gh_gs.rounds++;
 		if (gh_game_mode > 1)
 		{
 			gh_gs.comp_vs++;
@@ -58,9 +69,9 @@ void print_game_state()
 		if (gh_player_mark == 1) // zmienna z board który gracz wygra³
 		{
 			printf("Congratulations %s, you have won!\n", gh_ps1.name);
-			gh_ps1.wins++;
-			gh_ps1.rounds++;
-			gh_ps1.moves = move_player1; // doliczanie ruchów do wygranego
+			ps.wins += gh_ps1.wins++;
+			ps.rounds += gh_ps1.rounds++;
+			ps.moves += gh_ps1.moves = move_player1; // doliczanie ruchów do wygranego
 			gh_ps2.losts++;
 			gh_ps2.rounds++;
 			gh_ps2.moves = move_player2;
@@ -168,6 +179,7 @@ void round() {
 							break;
 						}
 						which_player = 1;
+						print_board();
 						player_two_move(take_coordinate(which_player));
 						gh_ps1.moves = move_player1;
 						if (is_win() >= 0) {
@@ -206,6 +218,7 @@ void round() {
 							gh_game_status = 3;
 							break;
 						}
+						print_board();
 					}
 					else if (player1_selected_symbol == 2) {
 						print_board();
@@ -215,6 +228,7 @@ void round() {
 							gh_game_status = 3;
 							break;
 						}
+						print_board();
 						which_player = 1;
 						player_two_move(take_coordinate(which_player));
 						gh_ps1.moves = move_player1;
